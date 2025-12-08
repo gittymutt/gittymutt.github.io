@@ -1,0 +1,338 @@
+
+
+
+/* https://css-tricks.com/fun-viewport-units/ */
+/* https:/stackoverflow.com/questions/20590239/maintain-aspect-ratio-of-div-but-fill-screen-width-and-height-in-css/36295495#20593342 */
+:root {
+    --yellow: #af8609;
+}
+
+/* Prevent ios from zooming on double tap */
+button {
+  touch-action: manipulation;
+}
+
+body {
+    background-color: black;
+    margin: 0;
+    height: 100vh;    
+}
+
+  #overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, .7);
+    cursor: pointer;
+  }
+
+  .instruction-sheet {
+    position: relative;
+    color: white;
+    padding: 20px;
+    background-color: rgb(40, 35, 35);
+    max-width: 700px;
+    margin: 10px auto;
+    z-index: 3000;
+    cursor: default;
+    font-size: 1em;
+  }
+
+  @media only screen and (min-width: 800px) {
+    .instruction-sheet {
+      font-size: 1.4em;
+    }
+  }
+
+  #close-button svg {
+    padding: 0px;
+    float: right;
+    cursor: pointer;
+    height: 60px;
+    color: white;
+  }
+
+  #close-button svg path {
+    fill: white;
+  }
+
+  .example-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+  }
+
+  .example-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid rgb(72, 70, 70) 2px;
+    width: 10%;
+    aspect-ratio: 1 / 1;
+    margin-right: 5px;
+    font-size: 2em;
+    font-family: sans-serif;
+  }
+
+  .container {
+    /* For height, subtract the height of the header+margin 
+    and also the margin under the keyboard */
+    height: calc(100% - 58px); 
+    position: relative;
+  }
+
+  /* be sure to count height and calculate above in container height */
+  header {
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom: rgb(63, 63, 63) 1px solid;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+  }
+
+  header h1 {
+    font-size: 1em;
+    font-weight: 600;
+  }
+
+  .board {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    grid-gap: 5px;
+    width: 100vw;
+    height: calc(7.3/5*100vw);
+    max-height: 50vh;
+    max-width: calc(5/7.3*60vh);
+    margin: auto; 
+  }
+  
+  .box {
+    border: gray 2px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 3em; 
+    padding: 0;
+    margin: 0;
+    font-weight: 200;
+    font-family: sans-serif;
+  }
+
+  .box-container {
+    color: white;
+    aspect-ratio: 1 / 1;
+    font-size: 3em; 
+    padding: 0;
+    margin: 0;
+    font-weight: 200;
+    font-family: sans-serif;
+    position: relative;
+    perspective: 1000;
+  }
+
+  .inner-box-container {
+    box-sizing: border-box;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;  
+  }
+  
+  .box-front-side, .box-back-side {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    text-align: center;
+    border: solid rgb(72, 70, 70) 2px;
+    box-sizing: border-box;
+  }
+
+  .box-back-side {
+    transform: rotateX(180deg);
+    -webkit-transform: rotateX(180deg);
+  }
+
+  .box-front-side span, .box-back-side span {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .flip {
+    transform: rotateX(180deg);
+  }
+
+  .pulse {
+    animation-name: pulse;
+    animation-duration: 0.1s;
+    border-color: rgb(185, 165, 165);
+  }
+
+  @keyframes pulse {
+    0% {
+      width: 100%;
+      height: 100%;
+      transform: translate(0, 0);
+    }
+    50% {
+      width: 105%;
+      height: 105%;
+      transform: translate(-2px, -2px);
+    }
+    100% {
+      width: 100%;
+      height: 100%;
+      transform: translate(0, 0);
+    }
+  }
+
+  .shake {
+    animation-name: shake;
+    animation-duration: .1s;
+    animation-iteration-count: 8;
+  }
+
+  @keyframes shake {
+    0% { transform: translateX(0px) }
+    33% { transform: translateX(-3px) }
+    66% { transform: translateX(0px) }
+    75% { transform: translateX(3px) }
+    100% { transform: translateX(0px) }
+  }
+
+  .keyboard {
+    position: absolute;
+    top: 60%;
+    bottom: 100px;
+    right:0;
+    left: 0;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-gap: 3px;
+    max-width: 800px;
+    margin: 0 auto;    
+  }
+
+  .keyboard button {
+    color: black;
+    font-size: 4vw;
+    padding: 0;
+  }
+
+  @media only screen and (min-width: 1000px) {
+    .keyboard {
+      max-width: 900px;
+    }
+    .keyboard button {
+      font-size: 34px;
+    }
+  }
+
+  .green {
+    background-color: green;
+    border-color: green;
+  }
+
+  .yellow {
+    background-color: var(--yellow);
+    border-color: var(--yellow);
+  }
+
+  .light-gray {
+    background-color: #aaa3a3;
+    border-color: #aaa3a3;
+
+  }
+
+  .dark-gray {
+    background-color: #534c4c;
+    border-color: #534c4c;
+  }
+
+  .you-lose, .you-win, .show-wrong-word {
+    z-index: 1000;
+    visibility: hidden;
+    position: absolute;
+    right: 50%;
+    transform: translate(50%, 50%);
+    text-align: center;
+    padding: 10%;
+    border-radius: 5px;
+    background-color: white;
+  }
+
+  .you-win {
+    background-color: rgb(24, 187, 43);
+    font-size: 2em;
+    color: rgb(9, 8, 8);
+    padding: 0px 30px;
+  }
+
+  #hint-close-button {
+    position: absolute;
+    right: -16px;
+    top: 8px;
+  }
+  
+  #hint-close-button svg {
+    cursor: pointer;
+    height: 30px;
+
+  }
+
+  #hint-close-button svg path {
+    fill: white;
+  }
+
+  #cheat-sheet {
+    position: absolute;
+    right: 10%;
+    display: none;
+    z-index: 20000;
+    width: 200px;
+    height: 70%;
+    color: white;
+    background-color: rgba(0, 0, 0, .7);
+    box-sizing: border-box;
+    margin-left: 1em;
+  }
+
+  #cheat-sheet textarea {
+    width: calc(100% - 6px);
+    height: calc(100% - 1em);
+    border: solid gray 3px;
+    background-color: black;
+    color: white;
+    padding: 1em;
+  }
+
+  .show-hint {
+    display: block !important;
+  }
+
+  #lets-play, .play-again {
+    display: block;
+    background-color: rgb(228, 224, 17);
+    font-size: 2em;
+    padding: 10px;
+    border-radius: 5px;
+    position: relative;
+    width: 300px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+  }
